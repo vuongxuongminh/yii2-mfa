@@ -1,0 +1,27 @@
+{
+    "name": "vxm/yii2-mfa",
+    "description": "Multi-factor authentication for yii2",
+    "type": "yii2-extension",
+    "keywords": ["yii2","extension","mfa"],
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Vuong Minh",
+            "email": "vuongxuongminh@gmail.com"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": ">=2.0.13"
+    },
+    "autoload": {
+        "psr-4": {
+            "vxm\\mfa\\": "src"
+        }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ]
+}
