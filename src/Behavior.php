@@ -122,7 +122,7 @@ class Behavior extends BaseBehavior
     {
         if ($this->enable) {
             return [
-                User::EVENT_BEFORE_LOGIN => 'handle'
+                User::EVENT_BEFORE_LOGIN => 'beforeLogin'
             ];
         } else {
             return [];
@@ -130,10 +130,12 @@ class Behavior extends BaseBehavior
     }
 
     /**
-     * @param UserEvent $event
+     * Event trigger when before user log in to system. It will be require an user verify otp digits except when user logged in via cookie base.
+     *
+     * @param UserEvent $event an event triggered
      * @throws ForbiddenHttpException
      */
-    public function handle(UserEvent $event)
+    public function beforeLogin(UserEvent $event)
     {
         if (!$event->isValid) {
             return;
