@@ -23,14 +23,14 @@ class TestCase extends BaseTestCase
 {
 
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->mockApplication();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 
