@@ -20,19 +20,17 @@ use vxm\mfa\QrCodeWidget;
 class QrCodeWidgetTest extends TestCase
 {
 
-    /**
-     * @expectedException \yii\base\InvalidCallException
-     * @expectException \yii\base\InvalidCallException
-     */
     public function testInvalidCall()
     {
-        QrCodeWidget::widget();
+        try {
+            QrCodeWidget::widget();
+        } catch (\Throwable $throwable) {
+            $this->assertTrue($throwable instanceof \yii\base\InvalidCallException);
+        }
     }
 
     /**
      * @depends testInvalidCall
-     * @expectedException \Assert\InvalidArgumentException
-     * @expectException \Assert\InvalidArgumentException
      */
     public function testMissingLabel()
     {
@@ -40,7 +38,11 @@ class QrCodeWidgetTest extends TestCase
         Yii::$app->user->login($identity);
         Yii::$app->user->switchIdentityLoggedIn();
 
-        QrCodeWidget::widget();
+        try {
+            QrCodeWidget::widget();
+        } catch (\Throwable $throwable) {
+            $this->assertTrue($throwable instanceof \Assert\InvalidArgumentException);
+        }
     }
 
     /**
