@@ -252,6 +252,10 @@ class Behavior extends BaseBehavior
      */
     public function setOtp($otp)
     {
+        if (is_array($otp) && !isset($otp['class'])) {
+            $otp['class'] = Otp::class;
+        }
+
         $this->_otp = Instance::ensure($otp, Otp::class);
     }
 

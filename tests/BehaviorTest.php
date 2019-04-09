@@ -83,4 +83,19 @@ class BehaviorTest extends TestCase
         $this->assertTrue(Yii::$app->user->validateOtpByIdentityLoggedIn($otp));
         $this->assertFalse(Yii::$app->user->validateOtpByIdentityLoggedIn('abcd'));
     }
+
+    /**
+     * @depends testGenerateOtpByIdentityLoggedIn
+     * @depends testValidateOtpByIdentityLoggedIn
+     */
+    public function testSetOtp()
+    {
+        $identity = Identity::findIdentity('user1');
+        Yii::$app->user->login($identity);
+        Yii::$app->user->setOtp([
+            'digits' => 8
+        ]);
+        $otp = Yii::$app->user->generateOtpByIdentityLoggedIn();
+        $this->assertTrue(strlen($otp) === 8);
+    }
 }
