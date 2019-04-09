@@ -22,6 +22,7 @@ class QrCodeWidgetTest extends TestCase
 
     /**
      * @expectedException \yii\base\InvalidCallException
+     * @expectException \yii\base\InvalidCallException
      */
     public function testInvalidCall()
     {
@@ -31,6 +32,7 @@ class QrCodeWidgetTest extends TestCase
     /**
      * @depends testInvalidCall
      * @expectedException \Assert\InvalidArgumentException
+     * @expectException \Assert\InvalidArgumentException
      */
     public function testMissingLabel()
     {
