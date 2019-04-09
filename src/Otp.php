@@ -96,7 +96,7 @@ class Otp extends BaseObject
      * @return string the qr code uri
      * @throws NotSupportedException
      */
-    public function getQrCodeUri(string $secretKey, array $params = [])
+    public function getQrCodeUri(string $secretKey, array $params)
     {
         $instance = $this->createInstance($secretKey);
 
@@ -104,7 +104,7 @@ class Otp extends BaseObject
             $instance->setParameter($param, $value);
         }
 
-        return $this->createInstance($secretKey)->getQrCodeUri($this->qrCodeUriTemplate);
+        return $instance->getQrCodeUri($this->qrCodeUriTemplate);
     }
 
     /**

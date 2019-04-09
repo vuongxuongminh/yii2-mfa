@@ -66,6 +66,11 @@ class VerifyAction extends Action
     public $invalidCallback;
 
     /**
+     * @var bool weather allow user can retry when type wrong or not.
+     */
+    public $retry = false;
+
+    /**
      * @inheritDoc
      * @throws InvalidConfigException
      */
@@ -112,11 +117,13 @@ class VerifyAction extends Action
                     return $this->controller->goBack();
                 }
             } else {
-                $this->user->removeIdentityLoggedIn();
+                if (!$this->retry) {
+                    $this->user->removeIdentityLoggedIn();
+                }
 
                 if ($this->invalidCallback) {
                     return call_user_func($this->invalidCallback, $this, $form);
-                } else {
+                } elseif (!$this->retry) {
                     return $this->user->loginRequired();
                 }
             }
@@ -124,6 +131,5 @@ class VerifyAction extends Action
 
         return $this->controller->render($this->viewFile, [$this->formVar => $form]);
     }
-
 
 }

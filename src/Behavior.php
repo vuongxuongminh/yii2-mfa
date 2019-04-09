@@ -238,7 +238,7 @@ class Behavior extends BaseBehavior
     public function getOtp()
     {
         if ($this->_otp === null) {
-            $this->setOTP(Otp::class);
+            $this->setOtp(Otp::class);
         }
 
         return $this->_otp;
@@ -318,7 +318,7 @@ class Behavior extends BaseBehavior
      * @return string|null qr code uri. If `null`, it means the user is a guest or not enable mfa.
      * @throws \Throwable
      */
-    public function getQrCodeUri(array $params = [])
+    public function getQrCodeUri(array $params)
     {
         if ($identity = $this->owner->getIdentity()) {
             if (!$identity instanceof IdentityInterface) {

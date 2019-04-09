@@ -51,11 +51,16 @@ class OtpForm extends Model
     /**
      * Verify an otp is valid with current logged in user
      *
+     * @return bool weather an otp property is valid.
      */
     public function verify()
     {
         if (!$this->user->validateOtpByIdentityLoggedIn($this->otp)) {
             $this->addError('otp', Yii::t('app', 'Otp is invalid!'));
+
+            return false;
+        } else {
+            return true;
         }
     }
 
