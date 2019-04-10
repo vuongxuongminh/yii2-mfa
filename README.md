@@ -124,7 +124,7 @@ print QrCodeWidget::widget([
 
 <p align="center">
 
-![QR Code](/resource/authenticator.jpg)
+<img src="resource/authenticator.jpg">
 
 </p>
 
