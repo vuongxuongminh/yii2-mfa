@@ -11,10 +11,12 @@
 
 An extension support implementing multi factor authenticate base on [Spomky-Labs/otphp](https://github.com/Spomky-Labs/otphp) wrapper for Yii2 user component.
 
+## Requirements
+
+* [PHP >= 7.1](http://php.net)
+* [yiisoft/yii2 >= 2.0.13](https://github.com/yiisoft/yii2)
 
 ## Installation
-
-> **Requires [PHP 7.1+](https://php.net/releases/)**
 
 Require Yii2 MFA using [Composer](https://getcomposer.org):
 
@@ -115,7 +117,7 @@ Use `vxm\mfa\QrCodeWidget` to render a qr code image in view
 use vxm\mfa\QrCodeWidget;
 
 
-print QrCodeWidget::widget([
+echo QrCodeWidget::widget([
     'label' => Yii::$app->user->identity->email,
     'issuer' => Yii::$app->name
 ]);
