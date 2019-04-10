@@ -5,7 +5,9 @@
  * @license [New BSD License](http://www.opensource.org/licenses/bsd-license.php)
  */
 
-namespace vxm\tests\unit\mfa;
+namespace vxm\test\unit\mfa;
+
+use PHPUnit\TextUI\ResultPrinter as BaseResultPrinter;
 
 /**
  * Class ResultPrinter overrides \PHPUnit\TextUI\ResultPrinter constructor
@@ -14,7 +16,7 @@ namespace vxm\tests\unit\mfa;
  *
  * @see https://github.com/yiisoft/yii2/blob/master/tests/ResultPrinter.php
  */
-class ResultPrinter extends \PHPUnit\TextUI\ResultPrinter
+class ResultPrinter extends BaseResultPrinter
 {
     public function __construct(
         $out = null,

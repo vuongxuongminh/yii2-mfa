@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<phpunit bootstrap="./tests/bootstrap.php"
+<phpunit bootstrap="./test/bootstrap.php"
          colors="true"
          verbose="true"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          stopOnFailure="false"
-         printerClass="vxm\tests\unit\mfa\ResultPrinter">
+         printerClass="vxm\test\unit\mfa\ResultPrinter">
     <testsuites>
         <testsuite name="Test Suite">
-            <directory>./tests</directory>
+            <directory>./test</directory>
         </testsuite>
     </testsuites>
     <filter>

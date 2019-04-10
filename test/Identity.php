@@ -5,12 +5,12 @@
  * @license [New BSD License](http://www.opensource.org/licenses/bsd-license.php)
  */
 
-namespace vxm\tests\unit\mfa;
-
-use vxm\mfa\IdentityInterface;
+namespace vxm\test\unit\mfa;
 
 use yii\base\Model;
 use yii\base\NotSupportedException;
+
+use vxm\mfa\IdentityInterface;
 
 class Identity extends Model implements IdentityInterface
 {

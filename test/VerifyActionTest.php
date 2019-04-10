@@ -5,13 +5,13 @@
  * @license [New BSD License](http://www.opensource.org/licenses/bsd-license.php)
  */
 
-namespace vxm\tests\unit\mfa;
+namespace vxm\test\unit\mfa;
 
 use Yii;
 
-use vxm\mfa\VerifyAction;
-
 use yii\web\Controller;
+
+use vxm\mfa\VerifyAction;
 
 /**
  * Class VerifyActionTest
@@ -98,7 +98,7 @@ class VerifyActionTest extends TestCase
                 return [
                     'verify' => [
                         'class' => 'vxm\mfa\VerifyAction',
-                        'viewFile' => '@vxm/tests/unit/mfa/verify-action-view.php',
+                        'viewFile' => '@vxm/test/unit/mfa/verify-action-view.php',
                         'retry' => true
                     ]
                 ];

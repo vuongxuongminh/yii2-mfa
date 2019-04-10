@@ -5,7 +5,7 @@
  * @license [New BSD License](http://www.opensource.org/licenses/bsd-license.php)
  */
 
-namespace vxm\tests\unit\mfa;
+namespace vxm\test\unit\mfa;
 
 use Yii;
 

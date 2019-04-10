@@ -9,5 +9,5 @@ define('YII_ENV', 'test');
 require_once(__DIR__ . '/../vendor/autoload.php');
 require_once(__DIR__ . '/../vendor/yiisoft/yii2/Yii.php');
 
-Yii::setAlias('@vxm/tests/unit/mfa', __DIR__);
+Yii::setAlias('@vxm/test/unit/mfa', __DIR__);
 Yii::setAlias('@vxm/mfa', dirname(__DIR__) . '/src');
