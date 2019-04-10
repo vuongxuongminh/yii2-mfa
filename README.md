@@ -50,6 +50,9 @@ use yii\db\ActiveRecord;
 
 use vxm\mfa\IdentityInterface;
 
+/**
+* @property string $mfa_secret
+*/
 class User extends ActiveRecord implements IdentityInterface 
 {
 
@@ -90,6 +93,10 @@ public function actions()
 After setup verify action, you need create a view (mfa-verify) in this view have a variable `model` is instance of `vxm\mfa\OtpForm` use to create a form submit an otp
 
 ```php
+
+/**
+* @var \vxm\mfa\OtpForm $model
+*/
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
