@@ -13,7 +13,24 @@ use yii\base\Action;
 use yii\base\InvalidConfigException;
 
 /**
- * Class VerifyAction
+ * Class VerifyAction provide an action verify mfa otp. For use, add it to actions method of your controller
+ * Example:
+ * ```php
+ *       public function actions()
+ *       {
+ *           return [
+ *               'verify' => [
+ *                   'class' => 'vxm\mfa\VerifyAction',
+ *                   'viewFile' => 'verify', // the name of view file use to render view
+ *                   'formVar' => 'model', // the name of variable use to parse [[\vxm\mfa\OtpForm]] object to view file.
+ *                   'retry' => true, // allow user retry when type wrong otp
+ *                   'successCallback' => [$this, 'mfaPassed'], // callable call when user type valid otp if not set [[yii\web\Controller::goBack()]] will be call.
+ *                   'invalidCallback' => [$this, 'mfaOtpInvalid'], // callable call when user type wrong otp if not set and property `retry` is false [[yii\web\User::loginRequired()]] will be call, it should be use for set flash notice to user.
+ *                   'retry' => true, // allow user retry when type wrong otp
+ *               ]
+ *           ];
+ *       }
+ * ```
  *
  * @author Vuong Minh <vuongxuongminh@gmail.com>
  * @since 1.0.0
@@ -31,7 +48,7 @@ class VerifyAction extends Action
     /**
      * @var string the name of variable in view refer to an object of `vxm\mfa\OtpForm`.
      */
-    public $formVar = 'mfaForm';
+    public $formVar = 'model';
 
     /**
      * @var callable|null when an identity had been verified it will be call. If not set, [[\yii\web\Controller::goBack()]] will be call.
@@ -46,7 +63,6 @@ class VerifyAction extends Action
      *
      * ```
      */
-
     public $successCallback;
 
     /**
@@ -71,6 +87,11 @@ class VerifyAction extends Action
     public $retry = false;
 
     /**
+     * @var string the form class handle end-user data
+     */
+    public $formClass = OtpForm::class;
+
+    /**
      * @inheritDoc
      * @throws InvalidConfigException
      */
@@ -81,7 +102,6 @@ class VerifyAction extends Action
 
         parent::init();
     }
-
 
     /**
      * @inheritDoc
@@ -105,11 +125,13 @@ class VerifyAction extends Action
      */
     public function run()
     {
-        $form = new OtpForm(['user' => $this->user]);
+        $formClass = $this->formClass;
+        $form = new $formClass(['user' => $this->user]);
 
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
             if ($form->verify()) {
                 $this->user->switchIdentityLoggedIn();
+                $this->user->removeIdentityLoggedIn();
 
                 if ($this->successCallback) {
                     return call_user_func($this->successCallback, $this, $form);
