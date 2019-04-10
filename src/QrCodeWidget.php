@@ -65,7 +65,7 @@ class QrCodeWidget extends Widget
         }
 
         if ($this->label) {
-            $params['label'] = $this->issuer;
+            $params['label'] = $this->label;
         }
 
         if ($this->image) {
