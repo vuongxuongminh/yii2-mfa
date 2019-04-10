@@ -18,7 +18,7 @@ use yii\web\IdentityInterface as BaseIdentityInterface;
 interface IdentityInterface extends BaseIdentityInterface
 {
     /**
-     * Returns an mfa secret key that will be use to generate digits secure code.
+     * Returns an mfa secret key that will be use to generate and validate otp.
      *
      * @return string|null
      */

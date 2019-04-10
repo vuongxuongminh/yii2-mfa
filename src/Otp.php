@@ -7,13 +7,13 @@
 
 namespace vxm\mfa;
 
+use yii\base\BaseObject;
+use yii\base\NotSupportedException;
+
 use OTPHP\HOTP;
 use OTPHP\TOTP;
 
 use ParagonIE\ConstantTime\Base32;
-
-use yii\base\BaseObject;
-use yii\base\NotSupportedException;
 
 /**
  * Class Otp support generate and validate by given secret key.
