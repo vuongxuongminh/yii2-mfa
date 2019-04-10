@@ -77,7 +77,7 @@ class QrCodeWidget extends Widget
         if ($uri) {
             return Html::img($uri, $this->options);
         } else {
-            throw new InvalidCallException('Current user not enabled MFA or is guest!');
+            throw new InvalidCallException('Current user is guest, can not render qr code!');
         }
     }
 

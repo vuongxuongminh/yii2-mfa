@@ -6,5 +6,6 @@
 /.scrutinizer.yml   export-ignore
 /.travis.yml        export-ignore
 /phpunit.xml.dist   export-ignore
-/tests              export-ignore
+/test              export-ignore
 /examples export-ignore
+/resource export-ignore
