@@ -31,7 +31,7 @@ composer require vxm/yii2-mfa
     'user' => [
         'as mfa' => [
             'class' => 'vxm\mfa\Behavior',
-            'verifyUrl' => 'site/verify' // verify action, see bellow for setup it
+            'verifyUrl' => 'site/mfa-verify' // verify action, see bellow for setup it
         ]
     ],
 ]
@@ -53,7 +53,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function getMfaSecretKey()
     {
-        return 'ABC';
+        return $this->mfa_secret;
     }
 
 }
