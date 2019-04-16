@@ -48,7 +48,7 @@ class TestCase extends BaseTestCase
         new $appClass(ArrayHelper::merge([
             'id' => 'test',
             'basePath' => __DIR__,
-            'vendorPath' => dirname(__DIR__, 2) . '/vendor',
+            'vendorPath' => dirname(__DIR__) . '/vendor',
             'components' => [
                 'user' => [
                     'identityClass' => Identity::class,
