@@ -57,6 +57,11 @@ class Otp extends BaseObject
     public $qrCodeUriTemplate = 'https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl={PROVISIONING_URI}';
 
     /**
+     * @var string the placeholder of qr code uri server.
+     */
+    public $qrCodeUriPlaceholder = '{PROVISIONING_URI}';
+
+    /**
      * Generate an otp digits.
      *
      * @param string $secretKey the secret key use to generate an otp
@@ -104,7 +109,7 @@ class Otp extends BaseObject
             $instance->setParameter($param, $value);
         }
 
-        return $instance->getQrCodeUri($this->qrCodeUriTemplate);
+        return $instance->getQrCodeUri($this->qrCodeUriTemplate, $this->qrCodeUriPlaceholder);
     }
 
     /**
