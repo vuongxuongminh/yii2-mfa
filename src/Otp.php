@@ -104,7 +104,7 @@ class Otp extends BaseObject
             $instance->setParameter($param, $value);
         }
 
-        return $instance->getQrCodeUri($this->qrCodeUriTemplate);
+        return $instance->getQrCodeUri($this->qrCodeUriTemplate, '{PROVISIONING_URI}');
     }
 
     /**
