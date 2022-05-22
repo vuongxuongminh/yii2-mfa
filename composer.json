@@ -11,9 +11,9 @@
         }
     ],
     "require": {
-        "php": ">=7.1",
+        "php": ">=7.1|>=8.0",
         "yiisoft/yii2": ">=2.0.13",
-        "spomky-labs/otphp": "^9.0"
+        "spomky-labs/otphp": "^9.0|^10.0"
     },
     "autoload": {
         "psr-4": {
