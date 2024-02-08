@@ -42,16 +42,17 @@ composer require vxm/yii2-mfa
 ### Identity implementing
 
 When use it, your identity class must be implementing `vxm\mfa\IdentityInterface` this interface extends from `yii\web\IdentityInterface` 
-add `getMfaSecretKey()`, this method return a mfa key of an identity use for generate and validate otp or return null if mfa disabled on an identity.
+add `getMfaSecretKey()` and `getIsMfaEnabled()`, this method return a mfa key of an identity use for generate and validate otp or return null if mfa disabled on an identity.
 
 ```php
-
 use yii\db\ActiveRecord;
 
 use vxm\mfa\IdentityInterface;
 
 /**
+* @property bool $is_mfa_enabled
 * @property string $mfa_secret
+* @mixin \vxm\mfa\Behavior
 */
 class User extends ActiveRecord implements IdentityInterface 
 {
@@ -60,10 +61,13 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->mfa_secret;
     }
+    
+    public function getIsMfaEnabled()
+    {
+        return $this->is_mfa_enabled && $this->mfa_secret;
+    }
 
 }
-
-
 ```
 
 ### Verify action config
@@ -93,24 +97,25 @@ public function actions()
 After setup verify action, you need create a view (mfa-verify) in this view have a variable `model` is instance of `vxm\mfa\OtpForm` use to create a form submit an otp
 
 ```php
-
+<?php
 /**
 * @var \vxm\mfa\OtpForm $model
 */
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+?>
 
-$form = ActiveForm::begin();
 
-echo Html::tag('h1', 'Multi factor authenticate');
+<?php $form = ActiveForm::begin(); ?>
 
-echo $form->field($model, 'otp');
+    <?= Html::tag('h1', 'Multi factor authenticate') ?>
+    
+    <?= $form->field($model, 'otp') ?>
+    
+    <?= Html::submitButton('Verify') ?>
 
-echo Html::submitButton('Verify');
-
-ActiveForm::end();
-
+<?php ActiveForm::end(); ?>
 
 ```
 

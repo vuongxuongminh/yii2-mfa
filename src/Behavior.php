@@ -145,9 +145,10 @@ class Behavior extends BaseBehavior
             throw new InvalidValueException("{$this->owner->identityClass}::findIdentity() must return an object implementing \\vxm\\mfa\\IdentityInterface.");
         }
 
+        $isEnabled = $event->identity->getIsMfaEnabled();
         $secretKey = $event->identity->getMfaSecretKey();
 
-        if (!empty($secretKey) && $this->owner->enableSession && !$event->cookieBased) {
+        if ($isEnabled && !empty($secretKey) && $this->owner->enableSession && !$event->cookieBased) {
             $event->isValid = false;
             $this->saveIdentityLoggedIn($event->identity, $event->duration);
             $this->verifyRequired();
