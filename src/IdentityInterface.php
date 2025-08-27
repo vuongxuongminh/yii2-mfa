@@ -24,4 +24,11 @@ interface IdentityInterface extends BaseIdentityInterface
      */
     public function getMfaSecretKey();
 
+    /**
+     * Returns a value indicating whether the mfa is enabled for this identity.
+     *
+     * @return bool
+     */
+    public function getIsMfaEnabled();
+
 }
