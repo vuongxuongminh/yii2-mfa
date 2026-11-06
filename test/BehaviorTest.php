@@ -9,6 +9,8 @@ namespace vxm\test\unit\mfa;
 
 use Yii;
 
+use PHPUnit\Framework\Attributes\Depends;
+
 use vxm\mfa\IdentityInterface;
 
 /**
@@ -32,9 +34,7 @@ class BehaviorTest extends TestCase
         $this->assertNotNull(Yii::$app->response->headers->get('location')); // verify required
     }
 
-    /**
-     * @depends testLoggedIn
-     */
+    #[Depends('testLoggedIn')]
     public function testSwitchIdentityLoggedIn()
     {
         $identity = Identity::findIdentity('user1');
@@ -44,9 +44,7 @@ class BehaviorTest extends TestCase
         $this->assertFalse(Yii::$app->user->getIsGuest());
     }
 
-    /**
-     * @depends testSwitchIdentityLoggedIn
-     */
+    #[Depends('testSwitchIdentityLoggedIn')]
     public function testQRCodeUri()
     {
         $identity = Identity::findIdentity('user1');
@@ -58,9 +56,7 @@ class BehaviorTest extends TestCase
         ]));
     }
 
-    /**
-     * @depends testLoggedIn
-     */
+    #[Depends('testLoggedIn')]
     public function testGenerateOtpByIdentityLoggedIn()
     {
         $identity = Identity::findIdentity('user1');
@@ -71,9 +67,7 @@ class BehaviorTest extends TestCase
         $this->assertTrue(strlen($otp) === Yii::$app->user->otp->digits);
     }
 
-    /**
-     * @depends testLoggedIn
-     */
+    #[Depends('testLoggedIn')]
     public function testValidateOtpByIdentityLoggedIn()
     {
         $identity = Identity::findIdentity('user1');
@@ -84,10 +78,8 @@ class BehaviorTest extends TestCase
         $this->assertFalse(Yii::$app->user->validateOtpByIdentityLoggedIn('abcd'));
     }
 
-    /**
-     * @depends testGenerateOtpByIdentityLoggedIn
-     * @depends testValidateOtpByIdentityLoggedIn
-     */
+    #[Depends('testGenerateOtpByIdentityLoggedIn')]
+    #[Depends('testValidateOtpByIdentityLoggedIn')]
     public function testSetOtp()
     {
         $identity = Identity::findIdentity('user1');

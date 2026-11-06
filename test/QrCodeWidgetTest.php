@@ -9,6 +9,8 @@ namespace vxm\test\unit\mfa;
 
 use Yii;
 
+use PHPUnit\Framework\Attributes\Depends;
+
 use vxm\mfa\QrCodeWidget;
 
 /**
@@ -22,32 +24,24 @@ class QrCodeWidgetTest extends TestCase
 
     public function testInvalidCall()
     {
-        try {
-            QrCodeWidget::widget();
-        } catch (\Throwable $throwable) {
-            $this->assertTrue($throwable instanceof \yii\base\InvalidCallException);
-        }
+        $this->expectException(\yii\base\InvalidCallException::class);
+
+        QrCodeWidget::widget();
     }
 
-    /**
-     * @depends testInvalidCall
-     */
+    #[Depends('testInvalidCall')]
     public function testMissingLabel()
     {
         $identity = Identity::findIdentity('user1');
         Yii::$app->user->login($identity);
         Yii::$app->user->switchIdentityLoggedIn();
 
-        try {
-            QrCodeWidget::widget();
-        } catch (\Throwable $throwable) {
-            $this->assertTrue($throwable instanceof \Assert\InvalidArgumentException);
-        }
+        $this->expectException(\OTPHP\Exception\InvalidLabelException::class);
+
+        QrCodeWidget::widget();
     }
 
-    /**
-     * @depends testMissingLabel
-     */
+    #[Depends('testMissingLabel')]
     public function testValid()
     {
         $identity = Identity::findIdentity('user1');

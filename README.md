@@ -13,7 +13,7 @@ An extension support implementing multi factor authenticate base on [Spomky-Labs
 
 ## Requirements
 
-* [PHP >= 7.1](http://php.net)
+* [PHP >= 8.1](http://php.net) (tested on PHP 8.4)
 * [yiisoft/yii2 >= 2.0.13](https://github.com/yiisoft/yii2)
 
 ## Installation

@@ -15,6 +15,8 @@ use OTPHP\TOTP;
 
 use ParagonIE\ConstantTime\Base32;
 
+use Psr\Clock\ClockInterface;
+
 /**
  * Class Otp support generate and validate by given secret key.
  *
@@ -60,6 +62,11 @@ class Otp extends BaseObject
      * @var string
      */
     public $qrCodeUriPlaceholder = '{PROVISIONING_URI}';
+
+    /**
+     * @var ClockInterface|null PSR-20 clock used by TOTP. Defaults to [[SystemClock]] when not set.
+     */
+    public $clock;
 
     /**
      * Generate an otp digits.
@@ -125,7 +132,7 @@ class Otp extends BaseObject
         $secretKey = Base32::encodeUpper($secretKey);
 
         if ($this->type === self::TOTP) {
-            return TOTP::create($secretKey, 30, $this->digest, $this->digits);
+            return TOTP::create($secretKey, 30, $this->digest, $this->digits, 0, $this->clock ?? new SystemClock());
         } elseif ($this->type === self::HOTP) {
             return HOTP::create($secretKey, 0, $this->digest, $this->digits);
         } else {

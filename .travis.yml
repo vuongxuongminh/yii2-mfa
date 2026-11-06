@@ -1,9 +1,9 @@
 language: php
 
 php:
-  - 7.1
-  - 7.2
-  - 7.3
+  - 8.2
+  - 8.3
+  - 8.4
 
 install:
   - composer self-update
@@ -18,4 +18,4 @@ script:
 
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+  - XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover

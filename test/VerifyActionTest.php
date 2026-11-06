@@ -9,6 +9,8 @@ namespace vxm\test\unit\mfa;
 
 use Yii;
 
+use PHPUnit\Framework\Attributes\Depends;
+
 use yii\web\Controller;
 
 use vxm\mfa\VerifyAction;
@@ -29,9 +31,7 @@ class VerifyActionTest extends TestCase
         $this->assertNotNull(Yii::$app->response->headers->get('location')); // login required
     }
 
-    /**
-     * @depends testBeforeAction
-     */
+    #[Depends('testBeforeAction')]
     public function testRenderView()
     {
         $identity = Identity::findIdentity('user1');
@@ -41,9 +41,7 @@ class VerifyActionTest extends TestCase
         $this->assertEquals('hello world!', trim($result));
     }
 
-    /**
-     * @depends testBeforeAction
-     */
+    #[Depends('testBeforeAction')]
     public function testInValidOtp()
     {
         $identity = Identity::findIdentity('user1');
@@ -68,9 +66,7 @@ class VerifyActionTest extends TestCase
         $this->assertNull($data);
     }
 
-    /**
-     * @depends testBeforeAction
-     */
+    #[Depends('testBeforeAction')]
     public function testValidOtp()
     {
         $identity = Identity::findIdentity('user1');

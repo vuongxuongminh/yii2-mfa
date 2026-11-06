@@ -11,9 +11,10 @@
         }
     ],
     "require": {
-        "php": "^7.2|^8.0",
+        "php": ">=8.2",
         "yiisoft/yii2": ">=2.0.13",
-        "spomky-labs/otphp": "^10.0"
+        "spomky-labs/otphp": "^11.4.3",
+        "psr/clock": "^1.0"
     },
     "autoload": {
         "psr-4": {
@@ -30,5 +31,13 @@
         "branch-alias": {
             "dev-master": "1.0.x-dev"
         }
+    },
+    "config": {
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.5"
     }
 }
