@@ -11,6 +11,7 @@ use Yii;
 
 use yii\base\Behavior as BaseBehavior;
 use yii\base\InvalidValueException;
+use yii\caching\CacheInterface;
 use yii\di\Instance;
 use yii\web\User;
 use yii\web\UserEvent;
@@ -102,6 +103,26 @@ class Behavior extends BaseBehavior
      * @var string the session variable name used to store values of an identity logged in.
      */
     public $mfaParam = '__mfa';
+
+    /**
+     * @var int max number of wrong otp digits per identity, after that the identity logged in is removed and
+     * a new login is required. Failures are counted in [[cache]], so the limit can't be reset by a new session.
+     * `0` means unlimited.
+     * @since 1.2.0
+     */
+    public $maxAttempts = 0;
+
+    /**
+     * @var int number of seconds the failed attempts counter is kept after the last failure.
+     * @since 1.2.0
+     */
+    public $attemptsDuration = 900;
+
+    /**
+     * @var CacheInterface|array|string the cache used to count failed attempts.
+     * @since 1.2.0
+     */
+    public $cache = 'cache';
 
     /**
      * @inheritDoc
@@ -297,17 +318,94 @@ class Behavior extends BaseBehavior
     {
         $data = $this->getIdentityLoggedIn();
 
-        if (is_array($data)) {
-            /** @var IdentityInterface $identity */
-            $identity = $data[0];
-            $secretKey = $identity->getMfaSecretKey();
+        if (!is_array($data)) {
+            return false;
+        }
 
-            if (!empty($secretKey)) {
-                return $this->getOtp()->validate($secretKey, $otp);
-            }
+        /** @var IdentityInterface $identity */
+        $identity = $data[0];
+        $secretKey = $identity->getMfaSecretKey();
+
+        if (!$identity->getIsMfaEnabled() || empty($secretKey)) {
+            return false;
+        }
+
+        if ($this->isAttemptsExceeded($identity)) {
+            $this->removeIdentityLoggedIn();
+
+            return false;
+        }
+
+        if ($this->getOtp()->validate($secretKey, $otp)) {
+            $this->resetFailedAttempts($identity);
+
+            return true;
+        }
+
+        $this->registerFailedAttempt($identity);
+
+        if ($this->isAttemptsExceeded($identity)) {
+            $this->removeIdentityLoggedIn();
         }
 
         return false;
+    }
+
+    /**
+     * Returns a value indicating whether the identity reached [[maxAttempts]] wrong otp digits.
+     *
+     * @param IdentityInterface $identity
+     * @return bool
+     * @throws \yii\base\InvalidConfigException
+     * @since 1.2.0
+     */
+    public function isAttemptsExceeded(IdentityInterface $identity)
+    {
+        return $this->maxAttempts > 0
+            && (int)$this->getCache()->get($this->getAttemptsCacheKey($identity)) >= $this->maxAttempts;
+    }
+
+    /**
+     * @param IdentityInterface $identity
+     * @throws \yii\base\InvalidConfigException
+     */
+    protected function registerFailedAttempt(IdentityInterface $identity)
+    {
+        if ($this->maxAttempts > 0) {
+            $key = $this->getAttemptsCacheKey($identity);
+            $this->getCache()->set($key, (int)$this->getCache()->get($key) + 1, $this->attemptsDuration);
+        }
+    }
+
+    /**
+     * @param IdentityInterface $identity
+     * @throws \yii\base\InvalidConfigException
+     */
+    protected function resetFailedAttempts(IdentityInterface $identity)
+    {
+        if ($this->maxAttempts > 0) {
+            $this->getCache()->delete($this->getAttemptsCacheKey($identity));
+        }
+    }
+
+    /**
+     * @param IdentityInterface $identity
+     * @return array
+     */
+    protected function getAttemptsCacheKey(IdentityInterface $identity)
+    {
+        return [__CLASS__, 'failedAttempts', $this->mfaParam, (string)$identity->getId()];
+    }
+
+    /**
+     * @return CacheInterface
+     * @throws \yii\base\InvalidConfigException
+     */
+    protected function getCache()
+    {
+        $this->cache = Instance::ensure($this->cache, CacheInterface::class);
+
+        return $this->cache;
     }
 
     /**

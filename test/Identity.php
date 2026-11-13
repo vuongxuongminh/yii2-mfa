@@ -57,4 +57,9 @@ class Identity extends Model implements IdentityInterface
         return 'ABC';
     }
 
+    public function getIsMfaEnabled()
+    {
+        return $this->_id !== 'user3';
+    }
+
 }

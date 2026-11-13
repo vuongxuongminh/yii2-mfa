@@ -98,4 +98,51 @@ class BehaviorTest extends TestCase
         $otp = Yii::$app->user->generateOtpByIdentityLoggedIn();
         $this->assertTrue(strlen($otp) === 8);
     }
+
+    public function testOtpIsRejectedWhenMfaDisabled()
+    {
+        Yii::$app->user->saveIdentityLoggedIn(Identity::findIdentity('user3'), 0);
+
+        $otp = Yii::$app->user->generateOtpByIdentityLoggedIn();
+        $this->assertFalse(Yii::$app->user->validateOtpByIdentityLoggedIn($otp));
+    }
+
+    public function testFailedAttemptsLimit()
+    {
+        $this->mockApplication([
+            'components' => [
+                'cache' => 'yii\caching\ArrayCache',
+                'user' => ['as mfa' => ['maxAttempts' => 2]],
+            ],
+        ]);
+        $identity = Identity::findIdentity('user2');
+        Yii::$app->user->login($identity);
+
+        $this->assertFalse(Yii::$app->user->validateOtpByIdentityLoggedIn('000000'));
+        $this->assertNotNull(Yii::$app->user->getIdentityLoggedIn());
+        $this->assertFalse(Yii::$app->user->validateOtpByIdentityLoggedIn('000000'));
+        $this->assertNull(Yii::$app->user->getIdentityLoggedIn());
+
+        Yii::$app->user->login($identity);
+        $otp = Yii::$app->user->generateOtpByIdentityLoggedIn();
+        $this->assertFalse(Yii::$app->user->validateOtpByIdentityLoggedIn($otp));
+        $this->assertNull(Yii::$app->user->getIdentityLoggedIn());
+    }
+
+    public function testSuccessResetsFailedAttempts()
+    {
+        $this->mockApplication([
+            'components' => [
+                'cache' => 'yii\caching\ArrayCache',
+                'user' => ['as mfa' => ['maxAttempts' => 2]],
+            ],
+        ]);
+        $identity = Identity::findIdentity('user1');
+        Yii::$app->user->login($identity);
+
+        $this->assertFalse(Yii::$app->user->validateOtpByIdentityLoggedIn('000000'));
+        $this->assertTrue(Yii::$app->user->validateOtpByIdentityLoggedIn(Yii::$app->user->generateOtpByIdentityLoggedIn()));
+        $this->assertFalse(Yii::$app->user->validateOtpByIdentityLoggedIn('000000'));
+        $this->assertNotNull(Yii::$app->user->getIdentityLoggedIn());
+    }
 }

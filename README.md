@@ -33,11 +33,16 @@ composer require vxm/yii2-mfa
     'user' => [
         'as mfa' => [
             'class' => 'vxm\mfa\Behavior',
-            'verifyUrl' => 'site/mfa-verify' // verify action, see bellow for setup it
+            'verifyUrl' => 'site/mfa-verify', // verify action, see bellow for setup it
+            'maxAttempts' => 5, // optional, wrong otp limit per identity, then a new login is required (0 - unlimited)
+            'attemptsDuration' => 900, // optional, seconds the failed attempts counter is kept
         ]
     ],
 ]
 ```
+
+An otp is accepted only when `getIsMfaEnabled()` of the identity returns `true`. Failed attempts are counted in the
+`cache` application component (see `cache` property), so the limit doesn't depend on the session.
 
 ### Identity implementing
 
